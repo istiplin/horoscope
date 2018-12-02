@@ -16,7 +16,7 @@ class Grid{
 		return $this->_data->title;
 	}
 	
-	public function getCount()
+	private function getCount()
 	{
 		return $this->_data->getCount();
 	}

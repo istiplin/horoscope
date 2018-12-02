@@ -2,8 +2,11 @@
 require_once 'Data.php';
 class CapricornData extends Data{
 
-	private $_begDate = '12-22';//'01-09'; 	//начало даты знака «козерог»	'12-22'
-	private $_endDate = '01-19';//'02-15';	//конец даты знака «козерог»	'01-19'
+	//private $_begDate = '01-09';
+	//private $_endDate = '02-15';
+        
+	private $_begDate = '12-22'; 	//начало даты знака «козерог»
+	private $_endDate = '01-19';	//конец даты знака «козерог»
         
 	public function __construct($params)
 	{
@@ -40,6 +43,7 @@ class CapricornData extends Data{
                         join user_field_value ufv on ufv.i_user_id = u.i_id
                         where ufv.i_fld_id=1
                         and beetween_date(ufv.t_value,'{$this->_begDate}','{$this->_endDate}')
+                        order by RIGHT(t_value,5)
                         limit ".(($this->page-1)*$this->pageSize).",{$this->pageSize}";
 
 		return $this->_data = $this->_db->query($sql);
