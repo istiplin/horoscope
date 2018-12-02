@@ -59,10 +59,10 @@ class Pagination {
     //корректирует номер страницы
     private function correctPage($page) {
         
-        if ($page !== null AND !ctype_digit($page))
+        if ($page != null AND !is_numeric($page))
             throw new Exception('Page is not integer');
 
-        if ($page === null OR $page < 1)
+        if ($page == null OR $page < 1)
             $page = 1;
 
         $pages = $this->_pageCount;
