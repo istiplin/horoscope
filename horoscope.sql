@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Дек 01 2018 г., 22:07
+-- Время создания: Дек 02 2018 г., 17:25
 -- Версия сервера: 8.0.12
 -- Версия PHP: 7.1.8
 
@@ -40,14 +40,14 @@ BEGIN
         	return true;
         end if;
    	elseif beg_date<end_date then
-    	if end_date>curr_date THEN
-        	if beg_date<curr_date THEN
+    	if end_date<curr_date THEN
+        	return false;
+        ELSE   
+        	if beg_date>curr_date THEN
             	return false;
             ELSE
             	return true;
             end if;
-        ELSE
-        	return false;
         end if;
     ELSE
     	return false;
@@ -249,34 +249,34 @@ CREATE TABLE `user_field_value` (
 INSERT INTO `user_field_value` (`i_fld_id`, `i_user_id`, `t_value`) VALUES
 (1, 1, '1920-01-19'),
 (1, 2, '198001-13'),
-(1, 3, '198901-10'),
+(1, 3, '198901-09'),
 (1, 4, '1991-12-11'),
 (1, 5, '1965-08-17'),
 (1, 6, '1920-01-20'),
 (1, 7, '1920-01-21'),
 (1, 8, '1920-12-22'),
-(1, 9, '1920-01-23'),
+(1, 9, '1920-12-23'),
 (1, 10, '1920-01-24'),
 (1, 11, '1920-01-25'),
 (1, 12, '1920-01-26'),
 (1, 13, '1920-01-27'),
 (1, 14, '1920-01-28'),
-(1, 15, '1990-01-29'),
+(1, 15, '1990-12-29'),
 (1, 16, '1990-12-30'),
-(1, 17, '1990-01-31'),
+(1, 17, '1990-12-31'),
 (1, 18, '1990-01-01'),
-(1, 19, '1990-02-02'),
-(1, 20, '1990-02-03'),
-(1, 21, '1990-02-04'),
-(1, 22, '199002-06'),
-(1, 23, '199002-06'),
-(1, 24, '199002-06'),
-(1, 25, '199002-05'),
-(1, 26, '199002-07'),
-(1, 27, '1990-02-08'),
-(1, 28, '1990-02-09'),
-(1, 29, '1990-02-10'),
-(1, 30, '1990-02-11');
+(1, 19, '1990-01-02'),
+(1, 20, '1990-01-03'),
+(1, 21, '1990-01-04'),
+(1, 22, '199001-06'),
+(1, 23, '199001-06'),
+(1, 24, '199001-06'),
+(1, 25, '199001-05'),
+(1, 26, '199001-07'),
+(1, 27, '1990-01-08'),
+(1, 28, '1990-01-09'),
+(1, 29, '1990-01-10'),
+(1, 30, '1990-01-15');
 
 --
 -- Индексы сохранённых таблиц
@@ -286,7 +286,7 @@ INSERT INTO `user_field_value` (`i_fld_id`, `i_user_id`, `t_value`) VALUES
 -- Индексы таблицы `prediction`
 --
 ALTER TABLE `prediction`
-  ADD UNIQUE KEY `d_date` (`d_date`,`i_zodiac_id`);
+  ADD UNIQUE KEY `d_date` (`d_date`,`i_zodiac_id`) USING BTREE;
 
 --
 -- Индексы таблицы `user`
@@ -308,6 +308,7 @@ ALTER TABLE `user_field`
 ALTER TABLE `user_field_value`
   ADD PRIMARY KEY (`i_fld_id`,`i_user_id`),
   ADD KEY `i_user_id` (`i_user_id`);
+ALTER TABLE `user_field_value` ADD FULLTEXT KEY `t_value` (`t_value`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
