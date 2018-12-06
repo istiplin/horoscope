@@ -36,7 +36,7 @@ $pager = new Pagination($data->getCount(), $_GET);
         echo $data->title;
         echo $pager->viewSummary();
         echo $pager->view();
-        echo $data->view($pager->page, $pager->pageSize);
+        echo $data->view($pager->getPageSize(), $pager->getOffset());
         echo $pager->view();
         ?>
     </body>

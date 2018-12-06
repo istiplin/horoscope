@@ -20,28 +20,27 @@ class CapricornData extends Data {
         if ($this->_count !== null)
             return $this->_count;
 
-        $sql = "select 
+        $sql = 'select 
                         count(*)
                     from user u
                     join user_field_value ufv on ufv.i_user_id = u.i_id
                     where ufv.i_fld_id=1
-                    and beetween_date(ufv.t_value,'{$this->_begDate}','{$this->_endDate}')";
+                    and beetween_date(ufv.t_value,\''.$this->_begDate.'\',\''.$this->_endDate.'\')';
         return $this->_count = $this->_db->query($sql)->fetchColumn();
     }
 
     //возвращает данные о пользователях со знаком зодиака «козерог».
-    protected function getData($page, $pageSize) {
-        $sql = "select 
+    protected function getData($limit, $offset) {
+        $sql = 'select 
                     u.i_id,
                     u.s_login,
                     ufv.t_value
                 from user u
                 join user_field_value ufv on ufv.i_user_id = u.i_id
                 where ufv.i_fld_id=1
-                and beetween_date(ufv.t_value,'{$this->_begDate}','{$this->_endDate}')
+                and beetween_date(ufv.t_value,\''.$this->_begDate.'\',\''.$this->_endDate.'\')
                 order by RIGHT(t_value,5)
-                limit " . (($page - 1) * $pageSize) . ",{$pageSize}";
-
+                limit '.$limit.' offset '.$offset;
         return $this->_db->query($sql);
     }
 
@@ -54,11 +53,11 @@ class CapricornData extends Data {
 <th>Дата рождения</th>
 </tr>';
         foreach ($data as $row) {
-            echo "<tr>
-<td>{$row['i_id']}</td>
-<td>{$row['s_login']}</td>
-<td>{$row['t_value']}</td>
-</tr>";
+            echo '<tr>
+<td>'.$row['i_id'].'</td>
+<td>'.$row['s_login'].'</td>
+<td>'.$row['t_value'].'</td>
+</tr>';
         }
         echo '</table>';
     }

@@ -1,5 +1,4 @@
 <?php
-
 class Pagination {
 
     private $_view;
@@ -7,28 +6,42 @@ class Pagination {
     private $_count;
     private $_getParams;
     private $_pageCount;
-    public $page;
-    public $pageSize = 20;
+    private $_page;
+    private $_offset;
+    private $_pageSize;
 
-    public function __construct($count, $getParams) {
+    public function __construct($count, $getParams, $pageSize = 20) {
         $this->_count = $count;
         $this->_getParams = $getParams;
-
+        $this->_pageSize = $pageSize;
         $this->_pageCount = $this->getPageCount();
-        $this->page = $this->correctPage($getParams['page']);
+        $this->_page = $this->correctPage($getParams['page']);
     }
 
+    public function getOffset()
+    {
+        if ($this->_offset !== null)
+            return $this->_offset;
+        
+        return $this->_offset = ($this->_page - 1) * $this->_pageSize;
+    }
+    
+    public function getPageSize()
+    {
+        return $this->_pageSize;
+    }
+    
     //выводит информацию о странице
     public function viewSummary() {
         if ($this->_viewSummary !== null)
             return $this->_viewSummary;
 
         if ($this->_count == 0)
-            return '';
+            return false;
 
-        $beg = ($this->page - 1) * $this->pageSize + 1;
+        $beg = $this->getOffset() + 1;
 
-        $end = $this->page * $this->pageSize;
+        $end = $this->_page * $this->_pageSize;
         if ($end > $this->_count)
             $end = $this->_count;
 
@@ -40,12 +53,14 @@ class Pagination {
         if ($this->_view !== null)
             return $this->_view;
 
+        if ($this->_pageCount < 2)
+            return false;
+        
         ob_start();
 
         $params = $this->_getParams;
-        $pageCount = $this->_pageCount;
-        for ($i = 1; $i <= $pageCount; $i++) {
-            if ($this->page == $i) {
+        for ($i = 1; $i <= $this->_pageCount; $i++) {
+            if ($this->_page == $i) {
                 echo $i . " ";
             } else {
                 $params['page'] = $i;
@@ -58,7 +73,6 @@ class Pagination {
 
     //корректирует номер страницы
     private function correctPage($page) {
-        
         if ($page != null AND !is_numeric($page))
             throw new Exception('Page is not integer');
 
@@ -76,10 +90,14 @@ class Pagination {
     //возвращает количество страниц
     private function getPageCount() {
         $count = $this->_count;
-        $pages = (int) ($count / $this->pageSize);
-        if ($count % $this->pageSize > 0)
+        $pages = (int) ($count / $this->_pageSize);
+        if ($count % $this->_pageSize > 0)
             $pages++;
         return $pages;
+    }
+    
+    public function getPage(){
+        return $this->_page;
     }
 
 }

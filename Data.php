@@ -14,18 +14,18 @@ abstract class Data {
     abstract public function getCount();
 
     //возвращает данные для последующего вывода списка
-    abstract protected function getData($page, $pageSize);
+    abstract protected function getData($limit, $offset);
 
     //выводит список
     abstract protected function _view($data);
 
     //выводит список
-    final public function view($page, $pageSize) {
+    final public function view($limit, $offset=0) {
         if ($this->getCount() == 0) {
             echo 'Нет данных!';
             return;
         }
-        $data = $this->getData($page, $pageSize);
+        $data = $this->getData($limit, $offset);
         ob_start();
         $this->_view($data);
         return ob_get_clean();

@@ -23,7 +23,7 @@ class PredictionData extends Data {
             $this->_intervalKey = $interval;
 
         $name = $this->_intervalNames[$this->_intervalKey];
-        $this->title = "<h4>Прогнозы для знака зодиака «козерог» $name: </h4>";
+        $this->title = '<h4>Прогнозы для знака зодиака «козерог» '.$name.':</h4>';
     }
 
     //возвращает количество записей
@@ -33,25 +33,24 @@ class PredictionData extends Data {
 
         $filter = $this->_intervalFilters[$this->_intervalKey];
 
-        $sql = "select 
-                                    count(*)
-                            from prediction
-                            where i_zodiac_id=1
-                            and $filter";
+        $sql = 'select 
+                        count(*)
+                from prediction
+                where i_zodiac_id=1
+                and '.$filter;
         return $this->_count = $this->_db->query($sql)->fetchColumn();
     }
 
     //возвращает данные о предсказаниях
-    protected function getData($page, $pageSize) {
+    protected function getData($limit, $offset) {
         $filter = $this->_intervalFilters[$this->_intervalKey];
 
-        $sql = "select
+        $sql = 'select
                     d_date,
                     t_text
                 from prediction
                 where i_zodiac_id=1
-                and $filter
-                limit " . (($page - 1) * $pageSize) . ",{$pageSize}";
+                and '.$filter.' limit '.$limit.' offset '.$offset;
 
         return $this->_db->query($sql);
     }
@@ -64,10 +63,10 @@ class PredictionData extends Data {
 <th>Предсказание</th>
 </tr>';
         foreach ($data as $row) {
-            echo "<tr>
-<td>{$row['d_date']}</td>
-<td>{$row['t_text']}</td>
-</tr>";
+            echo '<tr>
+<td>'.$row['d_date'].'</td>
+<td>'.$row['t_text'].'</td>
+</tr>';
         }
         echo '</table>';
     }
